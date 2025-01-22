@@ -6,12 +6,13 @@ const WatchDetail = () => {
   const [watch, setWatch] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { _id } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchWatchDetails = async () => {
       try {
-        const data = await getWatchById(_id);
+        const data = await getWatchById(id);
+        console.log(data);
         setWatch(data);
       } catch (err) {
         setError(err.message);
@@ -21,7 +22,7 @@ const WatchDetail = () => {
     };
 
     fetchWatchDetails();
-  }, [_id]);
+  }, [id]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

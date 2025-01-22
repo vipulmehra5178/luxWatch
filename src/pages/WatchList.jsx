@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchWatches } from "../services/api";
@@ -70,7 +69,7 @@ const WatchList = () => {
       >
         {watches.map((watch) => (
           <Link
-            to={`/watch/${watch._id}`}
+            to={`/watch/${watch.id}`}
             key={watch._id}
             className="watch-card"
             style={{
@@ -116,8 +115,8 @@ const WatchList = () => {
                   },
                 }}
                 onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/200x200?text=Error+Loading+Image";
+                  e.target.src = "https://via.placeholder.com/200x200?text=Watch+Image+Not+Found";
+                  e.target.onerror = null; // Prevents infinite loop if placeholder fails
                 }}
               />
             </div>

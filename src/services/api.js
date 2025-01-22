@@ -28,9 +28,10 @@ export const fetchWatches = async () => {
   }
 };
 
-export const getWatchById = async (_id) => {
+export const getWatchById = async (id) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/${_id}`);
+    const response = await fetch(`${API_BASE_URL}/${id}`);
+    console.log(response);
     if (!response.ok) {
       throw new Error("Watch not found");
     }

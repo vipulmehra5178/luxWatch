@@ -98,7 +98,7 @@ function About() {
               <h3>Contact Information</h3>
               <p>📞 (555) 123-4567</p>
               <p>📧 info@luxurywatches.com</p>
-              <p>📍 123 Ishu Lane, New Delhi, ND 110015</p>
+              <p>📍 123 Delhi Lane, New Delhi, ND 110015</p>
             </div>
             <div className="store-image">
               <img src="/store-interior.jpg" alt="Store Interior" />
