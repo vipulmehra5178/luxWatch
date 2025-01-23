@@ -3,7 +3,7 @@ import { useCart } from "../context/CartContext";
 import { useState } from "react"; // Assuming logo is in assets folder
 
 function Navbar() {
-  const { cart } = useCart();
+  const { cart, cartCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -29,7 +29,7 @@ function Navbar() {
         <Link to="/About">About</Link>
         <Link to="/checkout" className="cart-link">
           <span className="cart-icon">🛒</span>
-          <span className="cart-count">{cart.length}</span>
+          <span className="cart-count">{cartCount}</span>
         </Link>
       </div>
     </nav>

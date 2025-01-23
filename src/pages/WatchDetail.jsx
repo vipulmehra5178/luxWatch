@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getWatchById } from "../services/api";
+import { useCart } from '../context/CartContext';
 
 const WatchDetail = () => {
   const [watch, setWatch] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchWatchDetails = async () => {
@@ -23,6 +27,22 @@ const WatchDetail = () => {
 
     fetchWatchDetails();
   }, [id]);
+
+  // Add to cart function
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: watch.id,
+      title: watch.title,
+      price: watch.price,
+      image: watch.images[0],
+      quantity: quantity,
+      shippingCharge: watch.shipping.charges,
+      totalPrice: (watch.price * quantity) + watch.shipping.charges
+    };
+
+    addToCart(cartItem, quantity);
+    alert('Added to cart successfully!');
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -52,6 +72,92 @@ const WatchDetail = () => {
                 {watch.discount}% OFF
               </p>
             )}
+          </div>
+
+          <div style={{ 
+            marginTop: "20px",
+            marginBottom: "30px",
+            padding: "20px",
+            backgroundColor: "#f8f8f8",
+            borderRadius: "8px"
+          }}>
+            <div style={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: "20px",
+              marginBottom: "20px" 
+            }}>
+              <label htmlFor="quantity" style={{ fontSize: "1.1rem", fontWeight: "600" }}>
+                Quantity:
+              </label>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <button
+                  onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
+                  style={{
+                    padding: "5px 12px",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    backgroundColor: "#fff",
+                    cursor: "pointer"
+                  }}
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  style={{
+                    width: "60px",
+                    padding: "5px",
+                    textAlign: "center",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px"
+                  }}
+                />
+                <button
+                  onClick={() => setQuantity(prev => prev + 1)}
+                  style={{
+                    padding: "5px 12px",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    backgroundColor: "#fff",
+                    cursor: "pointer"
+                  }}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <p style={{ fontSize: "1.1rem", marginBottom: "10px" }}>
+                <strong>Shipping Charge:</strong> ₹{watch.shipping.charges}
+              </p>
+              <p style={{ fontSize: "1.2rem", color: "#2c2c2c" }}>
+                <strong>Total Price:</strong> ₹{(watch.price * quantity) + watch.shipping.charges}
+              </p>
+            </div>
+
+            <button
+              onClick={handleAddToCart}
+              style={{
+                backgroundColor: "#007bff",
+                color: "white",
+                padding: "12px 24px",
+                border: "none",
+                borderRadius: "6px",
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                width: "100%",
+                transition: "background-color 0.2s",
+                ":hover": {
+                  backgroundColor: "#0056b3"
+                }
+              }}
+            >
+              Add to Cart
+            </button>
           </div>
 
           <p style={{ fontSize: "1.2rem", marginBottom: "15px" }}><strong>Brand:</strong> {watch.brand}</p>
