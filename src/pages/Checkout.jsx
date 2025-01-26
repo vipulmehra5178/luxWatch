@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import ShippingModal from '../components/ShippingModal';
 
 const Checkout = () => {
   const { cartItems, clearCart } = useCart();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Guard clause for empty cart
   if (!cartItems || cartItems.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '50px' }}>
         <h2>Your cart is empty</h2>
-        <button 
+        <button
           onClick={() => navigate('/watches')}
           style={{
             padding: '10px 20px',
@@ -31,14 +33,24 @@ const Checkout = () => {
 
   // Calculate totals only if cartItems exists
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const shippingTotal = cartItems.reduce((total, item) => total + item.shippingCharge, 0);
+  // Get only the highest shipping charge
+  const shippingTotal = cartItems.length > 0 
+    ? Math.max(...cartItems.map(item => item.shippingCharge))
+    : 0;
   const total = subtotal + shippingTotal;
+
+  const handleShippingSubmit = (shippingData) => {
+    // Store shipping data if needed
+    console.log('Shipping Data:', shippingData);
+    setIsModalOpen(false);
+    // The navigation will now happen in the ShippingModal component
+  };
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '30px'
       }}>
@@ -63,13 +75,13 @@ const Checkout = () => {
           Empty Cart
         </button>
       </div>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px' }}>
         {/* Order Summary */}
         <div>
           <h2 style={{ marginBottom: '20px' }}>Order Summary</h2>
           {cartItems.map((item) => (
-            <div 
+            <div
               key={item.id}
               style={{
                 display: 'flex',
@@ -78,8 +90,8 @@ const Checkout = () => {
                 gap: '15px'
               }}
             >
-              <img 
-                src={item.image} 
+              <img
+                src={item.image}
                 alt={item.title}
                 style={{
                   width: '100px',
@@ -92,7 +104,7 @@ const Checkout = () => {
                 <h3>{item.title}</h3>
                 <p>Quantity: {item.quantity}</p>
                 <p>Price: ₹{item.price}</p>
-                <p>Shipping: ₹{item.shippingCharge}</p>
+                {/* <p>Shipping: ₹{item.shippingCharge}</p> */}
               </div>
             </div>
           ))}
@@ -106,9 +118,9 @@ const Checkout = () => {
           height: 'fit-content'
         }}>
           <h2 style={{ marginBottom: '20px' }}>Price Details</h2>
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
             gap: '15px'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -119,8 +131,8 @@ const Checkout = () => {
               <span>Shipping:</span>
               <span>₹{shippingTotal}</span>
             </div>
-            <div style={{ 
-              display: 'flex', 
+            <div style={{
+              display: 'flex',
               justifyContent: 'space-between',
               borderTop: '1px solid #ddd',
               paddingTop: '15px',
@@ -129,13 +141,9 @@ const Checkout = () => {
               <span>Total:</span>
               <span>₹{total}</span>
             </div>
-            
+
             <button
-              onClick={() => {
-                // Add your checkout logic here
-                alert('Order placed successfully!');
-                navigate('/');
-              }}
+              onClick={() => setIsModalOpen(true)}
               style={{
                 backgroundColor: '#28a745',
                 color: 'white',
@@ -152,6 +160,12 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+
+      <ShippingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleShippingSubmit}
+      />
     </div>
   );
 };

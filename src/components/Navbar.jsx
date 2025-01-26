@@ -25,7 +25,6 @@ function Navbar() {
       <div className={`nav-links ${isMenuOpen ? "active" : ""}`}>
         <Link to="/">Home</Link>
         <Link to="/watches">Watches</Link>
-        <Link to="/collections">Collections</Link>
         <Link to="/About">About</Link>
         <Link to="/checkout" className="cart-link">
           <span className="cart-icon">🛒</span>

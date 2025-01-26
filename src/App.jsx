@@ -4,6 +4,7 @@ import WatchDetail from './pages/WatchDetail';
 import { CartProvider } from './context/CartContext';
 import Checkout from './pages/Checkout';
 import Cart from './pages/Cart';
+import Payments from './pages/Payments';
 // ... other imports ...
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="/watch/:id" element={<WatchDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+
             {/* ... other routes ... */}
           </Routes>
         </div>
