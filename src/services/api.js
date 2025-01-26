@@ -1,9 +1,9 @@
-const API_BASE_URL = "https://watchesapi.onrender.com/watches";
+const watches_api = "https://watchesapi.onrender.com/watches";
 
 export const fetchWatches = async () => {
   try {
     // Log the exact URL we're trying to fetch
-    const url = await `${API_BASE_URL}`;
+    const url = await `${watches_api}`;
     console.log(url);
 
     // Basic fetch with error handling
@@ -30,7 +30,7 @@ export const fetchWatches = async () => {
 
 export const getWatchById = async (id) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/${id}`);
+    const response = await fetch(`${watches_api}/${id}`);
     console.log(response);
     if (!response.ok) {
       throw new Error("Watch not found");
